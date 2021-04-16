@@ -1,4 +1,6 @@
-class NegociacoesView {
+import { Negociacoes } from "../models/Negociacoes";
+
+export class NegociacoesView {
 	private _elemento: Element;
 
 	constructor(seletor: string) {

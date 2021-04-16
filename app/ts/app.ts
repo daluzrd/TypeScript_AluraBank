@@ -1,4 +1,6 @@
-const controller = new NegociacaoController();
+import { NegociacaoController } from "./controllers/NegociacaoController";
+
+const controller: NegociacaoController = new NegociacaoController();
 
 document
 	.querySelector(".form")
