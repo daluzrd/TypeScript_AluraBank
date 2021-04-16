@@ -1,18 +1,22 @@
-System.register([], function (exports_1, context_1) {
+System.register(["./View"], function (exports_1, context_1) {
     "use strict";
+    var View_1, NegociacoesView;
     var __moduleName = context_1 && context_1.id;
-    var NegociacoesView;
     return {
-        setters: [],
+        setters: [
+            function (View_1_1) {
+                View_1 = View_1_1;
+            }
+        ],
         execute: function () {
-            NegociacoesView = class NegociacoesView {
-                constructor(seletor) {
-                    this._elemento = document.querySelector(seletor);
+            NegociacoesView = class NegociacoesView extends View_1.View {
+                update(model) {
+                    let template = this.template(model);
+                    if (this._escape)
+                        template.replace(/<script>[\s\S]*?<\/script>/g, "");
+                    this._elemento.innerHTML = this.template(model);
                 }
-                update(negociacoes) {
-                    this._elemento.innerHTML = this.template(negociacoes);
-                }
-                template(negociacoes) {
+                template(model) {
                     return `
             <table class="table table-hover table-bordered">
                 <thead>
@@ -25,7 +29,9 @@ System.register([], function (exports_1, context_1) {
                 </thead>
 
                 <tbody>
-                    ${negociacoes.getNegociacoes().map(negociacao => {
+                    ${model
+                        .getNegociacoes()
+                        .map((negociacao) => {
                         return `
                             <tr>
                                 <td>${negociacao.data.getUTCDate()}</td>
@@ -34,7 +40,8 @@ System.register([], function (exports_1, context_1) {
                                 <td>${negociacao.volume}</td>
                             </tr>
                         `;
-                    }).join("")}
+                    })
+                        .join("")}
                 </tbody>
 
                 <tfoot>

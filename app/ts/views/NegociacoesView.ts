@@ -1,18 +1,17 @@
 import { Negociacoes } from "../models/Negociacoes";
+import { View } from "./View";
 
-export class NegociacoesView {
-	private _elemento: Element;
+export class NegociacoesView extends View<Negociacoes> {
+	update(model: Negociacoes): void {
+		let template = this.template(model);
 
-	constructor(seletor: string) {
-		this._elemento = document.querySelector(seletor);
+		if (this._escape) template.replace(/<script>[\s\S]*?<\/script>/g, "");
+
+		this._elemento.innerHTML = this.template(model);
 	}
 
-	update(negociacoes: Negociacoes): void {
-		this._elemento.innerHTML = this.template(negociacoes);
-	}
-
-	private template(negociacoes: Negociacoes): string {
-        return `
+	template(model: Negociacoes): string {
+		return `
             <table class="table table-hover table-bordered">
                 <thead>
                     <tr>
@@ -24,8 +23,10 @@ export class NegociacoesView {
                 </thead>
 
                 <tbody>
-                    ${negociacoes.getNegociacoes().map(negociacao => {
-                        return `
+                    ${model
+											.getNegociacoes()
+											.map((negociacao) => {
+												return `
                             <tr>
                                 <td>${negociacao.data.getUTCDate()}</td>
                                 <td>${negociacao.quantidade}</td>
@@ -33,7 +34,8 @@ export class NegociacoesView {
                                 <td>${negociacao.volume}</td>
                             </tr>
                         `;
-                    }).join("")}
+											})
+											.join("")}
                 </tbody>
 
                 <tfoot>
